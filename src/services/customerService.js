@@ -45,3 +45,23 @@ export async function getCustomers() {
 
   return { data, error }
 }
+
+/*
+ * HOW customerService.js WORKS
+ * ----------------------------
+ * Service layer for the "customer" table. All Supabase calls live here; components never import supabase directly.
+ *
+ * ensureClient():
+ *   - Called at the start of insertCustomer and getCustomers. If supabase is null (env not set), throws a clear error so the UI can show a message instead of failing silently.
+ *
+ * insertCustomer(customer):
+ *   - Expects { name, email, country }. Trims each value and inserts one row into the "customer" table.
+ *   - .insert([{...}]).select().single() inserts and returns the created row (with id, created_at, etc. if your table has them).
+ *   - Returns { data, error } like Supabase: data is the new row on success, error is set on failure.
+ *
+ * getCustomers():
+ *   - Selects all columns from "customer", ordered by created_at descending (newest first).
+ *   - Returns { data, error }; data is an array of rows (or null), error is set if the request fails.
+ *
+ * Components use these two functions and handle loading/error/success in the UI; they never touch supabase or table names.
+ */

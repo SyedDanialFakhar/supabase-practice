@@ -29,3 +29,27 @@ export function useCustomers() {
 
   return { customers, loading, error, refresh }
 }
+
+/*
+ * HOW useCustomers.js WORKS
+ * -------------------------
+ * This custom hook encapsulates all logic for loading and refreshing the customer list from Supabase.
+ * Components use it instead of calling Supabase directly.
+ *
+ * STATE:
+ *   - customers: array of customer objects from the DB (or [] on error).
+ *   - loading: true while a request is in flight, false when done.
+ *   - error: error message string if the fetch failed, null otherwise.
+ *
+ * refresh (useCallback):
+ *   - Sets loading true and error null, then calls getCustomers() from the service.
+ *   - On success: stores data in customers (or [] if data is null/undefined).
+ *   - On failure: stores the error message and clears customers.
+ *   - Then sets loading false. useCallback with [] deps means refresh is stable across renders.
+ *
+ * useEffect:
+ *   - Runs once on mount (dependency [refresh] is stable), so it triggers the initial fetch.
+ *
+ * RETURN:
+ *   - { customers, loading, error, refresh } so the page can show the list, a loading spinner, errors, and trigger a refetch after adding a customer.
+ */

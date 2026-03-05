@@ -26,3 +26,19 @@ export function Alert({ type = 'info', children, onDismiss }) {
     </div>
   )
 }
+
+/*
+ * HOW Alert.jsx WORKS
+ * ------------------
+ * This is a presentational component that shows a message box (success, error, or info).
+ *
+ * PROPS:
+ *   - type: 'success' | 'error' | 'info' — controls background and text color via the styles object.
+ *   - children: the message text (or any React node) to display inside the alert.
+ *   - onDismiss: optional function; when provided, a "×" button is shown and clicking it calls onDismiss (e.g. to hide the alert).
+ *
+ * BEHAVIOUR:
+ *   - The component picks a CSS class string from styles[type] and applies it to the outer div, so the alert looks different for success (green), error (red), or info (blue).
+ *   - role="alert" tells assistive technologies that this is an alert message.
+ *   - The dismiss button only renders when onDismiss is passed; clicking it lets the parent clear the message state.
+ */

@@ -247,3 +247,86 @@ export function CustomerManagement() {
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * HOW CustomerManagement.jsx WORKS
+ * --------------------------------
+ * This page handles: (1) form to add a customer, (2) table that lists all customers. All Supabase access goes through the service and useCustomers hook.
+ *
+ * IMPORTS & HELPERS:
+ *   - insertCustomer from customerService (no direct Supabase).
+ *   - useCustomers() returns { customers, loading, error, refresh } for the list.
+ *   - Alert for success/error messages. initialForm and validateForm define the form shape and validation rules.
+ *
+ * STATE:
+ *   - form: { name, email, country } — controlled inputs.
+ *   - fieldErrors: object with per-field error messages (e.g. { email: 'Invalid email' }) for validation.
+ *   - submitLoading: true while the insert request is in progress (disables form and shows "Adding…").
+ *   - submitError / successMessage: message to show in an Alert above the form; both can be dismissed.
+ *
+ * handleChange:
+ *   - Updates form[name] with the input value, clears that field’s error and submitError so the UI updates as the user types.
+ *
+ * handleSubmit:
+ *   1. preventDefault so the form doesn’t do a full page post.
+ *   2. validateForm(form): if there are errors, set fieldErrors and return (no API call).
+ *   3. Clear previous errors/success, set submitLoading true.
+ *   4. await insertCustomer(form). If error, set submitError and stop. If success: reset form, set successMessage, then await refresh() so the table refetches and shows the new customer.
+ *   5. finally: set submitLoading false so the button is enabled again.
+ *
+ * RENDER:
+ *   - Header with title and description.
+ *   - Form section: success/error Alerts (when set), then controlled inputs for name, email, country with labels and fieldErrors under each, and a submit button that shows a spinner when submitLoading.
+ *   - Table section: if error from useCustomers, show Alert. If loading, show spinner. Otherwise show a table of customers (or "No customers yet" when empty). Each row uses row.id as key and displays name, email, country.
+ */

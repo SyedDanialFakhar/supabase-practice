@@ -1,6 +1,6 @@
 # Supabase Practice – Customer Management
 
-A modern React frontend (Vite + JavaScript) with Supabase for customer management: add customers and view them in a table.
+A modern React frontend (Vite + JavaScript) with Supabase for customer management and **email/password authentication**: sign up, sign in, and only logged-in users can add/view customers.
 
 ## Setup
 
@@ -18,6 +18,7 @@ A modern React frontend (Vite + JavaScript) with Supabase for customer managemen
      - `country` – text, not null
      - `created_at` – timestamptz, default: `now()`
    - In **Settings → API** copy the project URL and anon (public) key.
+   - **Authentication**: In **Authentication → Providers**, ensure **Email** is enabled (default). Optionally turn off “Confirm email” for quicker local testing.
 
 3. **Environment**
    - Copy `.env.example` to `.env`:
@@ -28,11 +29,15 @@ A modern React frontend (Vite + JavaScript) with Supabase for customer managemen
      - `VITE_SUPABASE_URL` – your project URL  
      - `VITE_SUPABASE_ANON_KEY` – your anon key  
 
-4. **Run**
+4. **Run the auth SQL (required for protected customer table)**
+   - In Supabase Dashboard go to **SQL Editor**.
+   - Open `supabase-auth.sql` in this repo and run the **RLS section** (the part that enables RLS on `customer` and creates policies for `authenticated` users). If you don’t have the `customer` table yet, run the “If you never created the customer table” block instead.
+
+5. **Run the app**
    ```bash
    npm run dev
    ```
-   Open the URL shown (e.g. http://localhost:5173).
+   - Open the URL shown (e.g. http://localhost:5173). You’ll be redirected to **/login** until you sign in. Use **Sign up** to create an account, then sign in. After login you’ll see the Customer Management page and a **Log out** button.
 
 ## Scripts
 
@@ -44,8 +49,9 @@ A modern React frontend (Vite + JavaScript) with Supabase for customer managemen
 
 ```
 src/
-  components/   # Reusable UI (e.g. Alert)
-  pages/        # Page components (CustomerManagement)
+  components/   # Reusable UI (Alert, ProtectedRoute)
+  contexts/     # Auth state (AuthContext)
+  pages/        # Login, Signup, CustomerManagement
   services/     # API / Supabase (customerService)
   hooks/        # Custom hooks (useCustomers)
   lib/          # Supabase client config
@@ -56,7 +62,8 @@ src/
 
 - **Vite** – build and dev server  
 - **React 18** – UI  
+- **React Router** – routes (login, signup, protected home)  
 - **Tailwind CSS** – styling  
-- **Supabase** – backend (table `customer`)  
+- **Supabase** – backend (auth + table `customer`)  
 
 No Supabase keys are hardcoded; they are read from `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `.env`.
