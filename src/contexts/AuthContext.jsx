@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
-
+//authentication
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
@@ -75,3 +75,9 @@ export function useAuth() {
   if (!ctx) throw new Error('useAuth must be used within an AuthProvider')
   return ctx
 }
+
+
+
+
+
+//giving authentication provider
